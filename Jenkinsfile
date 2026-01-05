@@ -8,7 +8,7 @@ pipeline {
          }
         stage ('Test') {
             steps {
-                sh ' docker run -- hello-rhel-app'
+                sh ' docker run --rm hello-rhel-app'
             }
         }
      }
