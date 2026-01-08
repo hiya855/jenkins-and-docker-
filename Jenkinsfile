@@ -1,9 +1,15 @@
 pipeline {
     agent any
     environment {
-        DOCKER_HUB = credentials('docker-hubid')
+        DOCKER_HUB = credentials('docker-hub-id')
     }
     stages {
+        stage('Login') {
+            steps {
+               
+                sh 'echo $DOCKER_HUB_PSW | docker login -u $DOCKER_HUB_USR --password-stdin'
+            }
+        }
         stage('Build') {
             steps {
                 sh 'docker build -t hiya855/hello-rhel-app:latest .'
@@ -14,12 +20,10 @@ pipeline {
                 sh 'docker run --rm hiya855/hello-rhel-app:latest'
             }
         }
-        stage('Push to Docker Hub') {
+        stage('Push') {
             steps {
-                sh 'echo $DOCKER_HUB_PSW | docker login -u $DOCKER_HUB_USR --password-stdin'
                 sh 'docker push hiya855/hello-rhel-app:latest'
             }
         }
     }
 }
-
